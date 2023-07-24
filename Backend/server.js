@@ -33,7 +33,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 
 	console.log("File uploaded " + file.id + " " + file.originalName);
 
-	res.render("index", { fileLink: `${req.headers.origin}/file/${file.id}` });
+	// res.render("index", { fileLink: `${req.headers.origin}/file/${file.id}` });
 });
 
 app.route("/file/:id").get(handleDownload).post(handleDownload);
