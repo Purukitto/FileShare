@@ -1,15 +1,15 @@
 {
-  "name": "fileshare",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "devDependencies": {
-    "concurrently": "^8.2.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "fileshare",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"devDependencies": {
+		"concurrently": "^8.2.0"
+	},
+	"scripts": {
+		"dev": "concurrently \"cd Backend && npm run dev\" \"cd Frontend && npm start\" "
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
 }
