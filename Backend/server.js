@@ -6,8 +6,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
+var cors = require("cors");
 
 const app = express();
+
+var corsOptions = {
+	origin: "*",
+	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+	preflightContinue: false,
+	optionsSuccessStatus: 200,
+};
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -21,20 +29,25 @@ app.get("/", (req, res) => {
 	res.render("index");
 });
 
-app.post("/upload", upload.single("file"), async (req, res) => {
-	const fileData = {
-		path: req.file.path,
-		originalName: req.file.originalname,
-	};
-	if (req.body.password != null && req.body.password != "")
-		fileData.password = await bcrypt.hash(req.body.password, 10);
+app.post(
+	"/upload",
+	cors(corsOptions),
+	upload.single("file"),
+	async (req, res) => {
+		const fileData = {
+			path: req.file.path,
+			originalName: req.file.originalname,
+		};
+		if (req.body.password != null && req.body.password != "")
+			fileData.password = await bcrypt.hash(req.body.password, 10);
 
-	const file = await File.create(fileData);
+		const file = await File.create(fileData);
 
-	console.log("File uploaded " + file.id + " " + file.originalName);
+		console.log("File uploaded " + file.id + " " + file.originalName);
 
-	// res.render("index", { fileLink: `${req.headers.origin}/file/${file.id}` });
-});
+		res.json({ fileId: file.id, fileName: file.originalName });
+	}
+);
 
 app.route("/file/:id").get(handleDownload).post(handleDownload);
 

@@ -5,8 +5,9 @@ export default function App() {
 	const [password, setPassword] = useState("");
 	const [isFilePicked, setIsFilePicked] = useState(false);
 	const [file, setFile] = useState();
+	const [link, setLink] = useState("");
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		if (file === undefined) {
@@ -23,13 +24,26 @@ export default function App() {
 			method: "POST",
 			body: formData,
 		})
-			.then((response) => response.json())
-			.then((result) => {
-				console.log("Success:", result);
+			.then((res) => {
+				return res.json();
+			})
+			.then((data) => {
+				setLink(
+					<a
+						href={`http://localhost:3000/file/${data.fileId}`}
+						className="text-indigo-500"
+					>
+						{`http://localhost:3000/file/${data.fileId}`}
+					</a>
+				);
 			})
 			.catch((error) => {
 				console.error("Error:", error);
 			});
+
+		setIsFilePicked(false);
+		setFile();
+		setPassword("");
 	};
 
 	const handleFileChange = (e) => {
@@ -42,26 +56,23 @@ export default function App() {
 	};
 
 	return (
-		<div className=" bg-slate-800">
+		<div className="bg-slate-800 flex items-center justify-center py-10">
 			<form>
 				<div className="space-y-12">
 					<div className="border-b border-white/10 pb-12">
-						<h2 className="text-base font-semibold leading-7 text-white">
+						<h2 className="text-base font-semibold leading-7 text-white ">
 							FileShare
 						</h2>
 						<p className="mt-1 text-sm leading-6 text-gray-400">
 							A simple file sharing demo app
 						</p>
 
-						<div className=" py-6"></div>
+						<div className=" py-6">{link ? link : null}</div>
 
 						<div className="col-span-full">
-							<label
-								htmlFor="cover-photo"
-								className="block text-sm font-medium leading-6 text-white"
-							>
+							<div className="block text-sm font-medium leading-6 text-white">
 								File
-							</label>
+							</div>
 							<div className="mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10">
 								{isFilePicked ? (
 									<div className="flex-col text-white text-lg">
@@ -103,12 +114,9 @@ export default function App() {
 
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 							<div className="sm:col-span-4">
-								<label
-									htmlFor="password"
-									className="block text-sm font-medium leading-6 text-white"
-								>
+								<div className="block text-sm font-medium leading-6 text-white">
 									Password
-								</label>
+								</div>
 								<div className="mt-2">
 									<div className="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
 										<input
@@ -116,6 +124,7 @@ export default function App() {
 											name="password"
 											id="password"
 											onChange={handlePasswordChange}
+											value={password}
 											className="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"
 											placeholder="Enter password (optional)"
 										/>
@@ -126,7 +135,7 @@ export default function App() {
 					</div>
 				</div>
 
-				<div className=" justify-center mt-6 flex items-center">
+				<div className=" mt-6 flex items-center justify-center">
 					<button
 						onClick={handleSubmit}
 						type="submit"
