@@ -42,18 +42,42 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 	});
 });
 
+app.route("/download/:id").get(async (req, res) => {
+	const file = await File.findById(req.params.id);
+
+	req.query.name = req.query.name.replace(/ /g, "_");
+
+	if (file.password != null) {
+		return res.redirect(
+			308,
+			"http://127.0.0.1:5173/file/" +
+				req.params.id +
+				"?name=" +
+				req.query.name +
+				"&protected=true"
+		);
+	}
+	return res.redirect(
+		308,
+		"http://127.0.0.1:5173/file/" +
+			req.params.id +
+			"?name=" +
+			req.query.name
+	);
+});
+
 app.route("/file/:id/:password?").get(async (req, res) => {
 	const file = await File.findById(req.params.id);
 
 	if (file.password != null) {
-		if (req.params.password == undefined) {
+		if (req.query.password == undefined) {
 			return res.redirect(
 				303,
 				"http://127.0.0.1:5173/file/" + req.params.id
 			);
 		} else {
-			if (!(await bcrypt.compare(req.params.password, file.password))) {
-				return res.send(alert("Wrong password"));
+			if (!(await bcrypt.compare(req.query.password, file.password))) {
+				return res.status(401).send("Incorrect password");
 			}
 		}
 	}

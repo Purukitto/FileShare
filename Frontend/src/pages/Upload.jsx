@@ -5,6 +5,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Upload() {
 	const [password, setPassword] = useState("");
@@ -23,7 +24,7 @@ export default function Upload() {
 		const formData = new FormData();
 
 		formData.append("file", file);
-		if(password.trim() != "") formData.append("password", password);
+		if (password.trim() != "") formData.append("password", password);
 
 		fetch("http://localhost:3000/upload", {
 			method: "POST",
@@ -35,12 +36,13 @@ export default function Upload() {
 			.then((data) => {
 				setLink(
 					<a
-						href={`http://localhost:3000/file/${data.fileId}`}
+						href={`http://localhost:3000/download/${data.fileId}?name=${data.fileName}`}
 						className="text-indigo-500"
 					>
-						{`http://localhost:3000/file/${data.fileId}`}
+						{`http://localhost:3000/download/${data.fileId}?name=${data.fileName}`}
 					</a>
 				);
+				toast.success("File uploaded successfully!");
 			})
 			.catch((error) => {
 				console.error("Error:", error);
@@ -63,6 +65,7 @@ export default function Upload() {
 	const handleFileRemove = () => {
 		setIsFilePicked(false);
 		setFile();
+		toast.info("File removed!");
 	};
 
 	return (
@@ -84,6 +87,9 @@ export default function Upload() {
 									onClick={() => {
 										navigator.clipboard.writeText(
 											link.props.href
+										);
+										toast.success(
+											"Link copied to clipboard!"
 										);
 									}}
 									className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
