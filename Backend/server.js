@@ -9,14 +9,9 @@ const bcrypt = require("bcrypt");
 var cors = require("cors");
 
 const app = express();
+app.use(cors());
 
-var corsOptions = {
-	origin: "*",
-	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-	preflightContinue: false,
-	optionsSuccessStatus: 200,
-};
-
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const upload = multer({ dest: "uploads" });
@@ -29,40 +24,37 @@ app.get("/", (req, res) => {
 	res.render("index");
 });
 
-app.post(
-	"/upload",
-	cors(corsOptions),
-	upload.single("file"),
-	async (req, res) => {
-		const fileData = {
-			path: req.file.path,
-			originalName: req.file.originalname,
-		};
-		if (req.body.password != null && req.body.password != "")
-			fileData.password = await bcrypt.hash(req.body.password, 10);
+app.post("/upload", upload.single("file"), async (req, res) => {
+	const fileData = {
+		path: req.file.path,
+		originalName: req.file.originalname,
+	};
+	if (req.body.password != null && req.body.password != "")
+		fileData.password = await bcrypt.hash(req.body.password, 10);
 
-		const file = await File.create(fileData);
+	const file = await File.create(fileData);
 
-		console.log("File uploaded " + file.id + " " + file.originalName);
+	console.log("File uploaded " + file.id + " " + file.originalName);
 
-		res.json({ fileId: file.id, fileName: file.originalName });
-	}
-);
+	res.json({
+		fileId: file.id,
+		fileName: file.originalName,
+	});
+});
 
-app.route("/file/:id").get(handleDownload).post(handleDownload);
-
-async function handleDownload(req, res) {
+app.route("/file/:id/:password?").get(async (req, res) => {
 	const file = await File.findById(req.params.id);
 
 	if (file.password != null) {
-		if (req.body.password == null) {
-			res.render("password");
-			return;
-		}
-
-		if (!(await bcrypt.compare(req.body.password, file.password))) {
-			res.render("password", { error: true });
-			return;
+		if (req.params.password == undefined) {
+			return res.redirect(
+				303,
+				"http://127.0.0.1:5173/file/" + req.params.id
+			);
+		} else {
+			if (!(await bcrypt.compare(req.params.password, file.password))) {
+				return res.send(alert("Wrong password"));
+			}
 		}
 	}
 
@@ -73,6 +65,6 @@ async function handleDownload(req, res) {
 	);
 
 	res.download(file.path, file.originalName);
-}
+});
 
 app.listen(process.env.PORT || 3000);
