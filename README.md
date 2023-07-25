@@ -3,7 +3,7 @@
 ### Stack : MERN
 
 Screenshots of the app:
-![Home screen](Screenshots/image.png)
-![Uploaded file](Screenshots/image-1.png)
-![Share link](Screenshots/image-2.png)
-![Download with link](Screenshots/image-3.png)
+<img src="Screenshots/image.png" alt="Home Screen" width="300" />
+<img src="Screenshots/image-1.png" alt="Uploaded file" width="300" />
+<img src="Screenshots/image-2.png" alt="Share link" width="300" />
+<img src="Screenshots/image-3.png" alt="Download with link" width="300" />
