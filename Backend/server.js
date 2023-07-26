@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const File = require("./models/file");
+const File = require("./models/File.js");
 
 const express = require("express");
 const mongoose = require("mongoose");
