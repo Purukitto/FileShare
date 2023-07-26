@@ -26,7 +26,7 @@ export default function Upload() {
 		formData.append("file", file);
 		if (password.trim() != "") formData.append("password", password);
 
-		fetch(`${import.meta.env.API_URL}/upload`, {
+		fetch(`${import.meta.env.VITE_API_URL}/upload`, {
 			method: "POST",
 			body: formData,
 		})
@@ -36,10 +36,14 @@ export default function Upload() {
 			.then((data) => {
 				setLink(
 					<a
-						href={`${import.meta.env.API_URL}/download/${data.fileId}?name=${data.fileName}`}
+						href={`${import.meta.env.VITE_API_URL}/download/${
+							data.fileId
+						}?name=${data.fileName}`}
 						className="text-indigo-500"
 					>
-						{`${import.meta.env.API_URL}/download/${data.fileId}?name=${data.fileName}`}
+						{`${import.meta.env.VITE_API_URL}/download/${
+							data.fileId
+						}?name=${data.fileName}`}
 					</a>
 				);
 				toast.success("File uploaded successfully!");
