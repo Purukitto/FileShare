@@ -26,7 +26,7 @@ export default function Upload() {
 		formData.append("file", file);
 		if (password.trim() != "") formData.append("password", password);
 
-		fetch("http://localhost:3000/upload", {
+		fetch("http://127.0.0.1:3000/upload", {
 			method: "POST",
 			body: formData,
 		})
@@ -36,10 +36,10 @@ export default function Upload() {
 			.then((data) => {
 				setLink(
 					<a
-						href={`http://localhost:3000/download/${data.fileId}?name=${data.fileName}`}
+						href={`http://127.0.0.1:3000/download/${data.fileId}?name=${data.fileName}`}
 						className="text-indigo-500"
 					>
-						{`http://localhost:3000/download/${data.fileId}?name=${data.fileName}`}
+						{`http://127.0.0.1:3000/download/${data.fileId}?name=${data.fileName}`}
 					</a>
 				);
 				toast.success("File uploaded successfully!");
