@@ -23,6 +23,11 @@ export default function Upload() {
 
 		const formData = new FormData();
 
+		if (file.size / 1024 / 1024 > 20) {
+			toast.error("File size exceeds 20MB");
+			return;
+		}
+
 		formData.append("file", file);
 		if (password.trim() != "") formData.append("password", password);
 
@@ -147,10 +152,10 @@ export default function Upload() {
 										className="mx-auto h-12 w-12 text-gray-500"
 										aria-hidden="true"
 									/>
-									<div className="mt-4 flex text-sm leading-6 text-gray-400">
+									<div className="mt-3 flex-row text-sm leading-6 text-gray-400">
 										<label
 											htmlFor="file-upload"
-											className="relative cursor-pointer rounded-md bg-gray-900 font-semibold text-white focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
+											className="relative cursor-pointer py-2 px-3 rounded-md bg-gray-900 font-semibold text-white focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
 										>
 											<span className=" px-2">
 												Upload a file
@@ -164,7 +169,10 @@ export default function Upload() {
 												className="sr-only"
 											/>
 										</label>
-										<p className="pl-1">or drag and drop</p>
+										<p className="pl-1 mt-1">or drag and drop</p>
+										<p className="pl-1 mt-1 text-xs">
+											Max file size : 20MB
+										</p>
 									</div>
 								</div>
 							)}
