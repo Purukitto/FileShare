@@ -7,6 +7,7 @@
 		"concurrently": "^8.2.0"
 	},
 	"scripts": {
+		"start": "concurrently \"cd Backend && npx yarn start\" \"cd Frontend && npx yarn dev\"",
 		"dev": "concurrently \"cd Backend && npx yarn dev\" \"cd Frontend && npx yarn dev\" "
 	},
 	"keywords": [],
