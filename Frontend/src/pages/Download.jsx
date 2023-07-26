@@ -14,7 +14,7 @@ export default function Download() {
 
 	const handleFileDownload = async (e) => {
 		e.preventDefault();
-		fetch(`http://127.0.0.1:3000/file/${fileId}?password=${password}`)
+		fetch(`${import.meta.env.API_URL}/file/${fileId}?password=${password}`)
 			.then((res) => {
 				if (res.status != 401) toast.success("Download started!");
 				else {
