@@ -50,7 +50,8 @@ app.route("/download/:id").get(async (req, res) => {
 	if (file.password != null) {
 		return res.redirect(
 			308,
-			"http://127.0.0.1:5173/file/" +
+			process.env.CLIENT_URL +
+				"/file/" +
 				req.params.id +
 				"?name=" +
 				req.query.name +
@@ -59,7 +60,8 @@ app.route("/download/:id").get(async (req, res) => {
 	}
 	return res.redirect(
 		308,
-		"http://127.0.0.1:5173/file/" +
+		process.env.CLIENT_URL +
+			"/file/" +
 			req.params.id +
 			"?name=" +
 			req.query.name
@@ -73,7 +75,7 @@ app.route("/file/:id/:password?").get(async (req, res) => {
 		if (req.query.password == undefined) {
 			return res.redirect(
 				303,
-				"http://127.0.0.1:5173/file/" + req.params.id
+				process.env.CLIENT_URL + "/file/" + req.params.id
 			);
 		} else {
 			if (!(await bcrypt.compare(req.query.password, file.password))) {
