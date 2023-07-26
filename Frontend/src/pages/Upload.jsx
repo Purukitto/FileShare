@@ -17,7 +17,7 @@ export default function Upload() {
 		e.preventDefault();
 
 		if (file === undefined) {
-			alert("Please select a file to upload");
+			toast.error("Please select a file to upload");
 			return;
 		}
 
