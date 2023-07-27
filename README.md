@@ -5,6 +5,7 @@
 ## Features
 
 -   Upload files (with optional password)
+-   Encrypted password stored in database
 -   Share files with link
 -   Download files easily
 
